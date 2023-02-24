@@ -2,6 +2,7 @@
     package="com.example.holylazy">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
+        android:usesCleartextTraffic="true"
         android:label="holylazy"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

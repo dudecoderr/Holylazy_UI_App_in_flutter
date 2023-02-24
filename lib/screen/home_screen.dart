@@ -1,6 +1,7 @@
 import 'package:bubble_lens/bubble_lens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:holylazy/screen/videoplay_screen.dart';
 import 'package:video_player/video_player.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,20 +12,37 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  VideoPlayerController? _controller;
+  // VideoPlayerController? controller;
 
-  @override
-  void initState() {
-    _controller = VideoPlayerController.network(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4')
-      ..initialize().then((_) {
-        //_controller!.play();
-        setState(() {});
-      });
-    super.initState();
-  }
+  List videos = [
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'http://techslides.com/demos/sample-videos/small.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'http://techslides.com/demos/sample-videos/small.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'http://techslides.com/demos/sample-videos/small.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'http://techslides.com/demos/sample-videos/small.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'http://techslides.com/demos/sample-videos/small.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'http://techslides.com/demos/sample-videos/small.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'http://techslides.com/demos/sample-videos/small.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'http://techslides.com/demos/sample-videos/small.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'http://techslides.com/demos/sample-videos/small.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'http://techslides.com/demos/sample-videos/small.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+  ];
 
-  bool selected = false;
+  List catagory = ["For You", "Nature", "Ocean", "Tranding"];
+
+  int selected = 0;
+  int i = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -41,23 +59,43 @@ class _HomeScreenState extends State<HomeScreen> {
             size: 200,
             highRatio: 300,
             widgets: [
-              for (int i = 0; i < 30; i++)
-                AspectRatio(
-                  aspectRatio: 0.5,
-                  child: Container(
-                    height: 200.h,
-                    width: 200.w,
-                    margin: EdgeInsets.all(10.0.sp),
-                    decoration: BoxDecoration(
+              for (i; i < videos.length; i++)
+                GestureDetector(
+                  onTap: () {
+                    // VideoPlayer(VideoPlayerController.network(
+                    //   videos[i],
+                    // )
+                    //   ..initialize()
+                    //   ..play()
+                    //   ..setLooping(true));
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        return const VideoPlayScreen();
+                      },
+                    ));
+                  },
+                  child: AspectRatio(
+                    aspectRatio: 0.5,
+                    child: Container(
+                      height: 200.h,
+                      width: 200.w,
+                      margin: EdgeInsets.all(10.0.sp),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20.0.r),
+                          ),
+                          color: Colors.transparent),
+                      child: ClipRRect(
                         borderRadius: BorderRadius.all(
                           Radius.circular(20.0.r),
                         ),
-                        color: Colors.transparent),
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20.0.r),
-                        ),
-                        child: VideoPlayer(_controller!)),
+                        child: VideoPlayer(VideoPlayerController.network(
+                          videos[i],
+                        )
+                          ..initialize()
+                          ..setLooping(true)),
+                      ),
+                    ),
                   ),
                 ),
             ],
@@ -173,15 +211,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             border: Border.all(
                                 color: Colors.white.withOpacity(0.4),
                                 width: 2.w),
-                            image: DecorationImage(
+                            image: const DecorationImage(
                               image: ExactAssetImage('assets/images/man2.png'),
                               fit: BoxFit.cover,
                             ),
                           ),
                           child: Container(
                             decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white.withOpacity(0.4)),
+                              shape: BoxShape.circle,
+                              color: Colors.white.withOpacity(0.4),
+                            ),
                           ),
                         ),
                         Container(
@@ -287,29 +326,41 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
-                    itemCount: 6,
+                    itemCount: catagory.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
                           setState(() {
-                            selected = !selected;
+                            selected = index;
                           });
                         },
                         child: Container(
                           margin: EdgeInsets.only(right: 10.w),
                           height: 30.h,
-                          width: 90.w,
-                          decoration: const BoxDecoration(
-                            color: Color(0xffd2d0ce),
+                          decoration: BoxDecoration(
+                            color: selected == index
+                                ? const Color(0xffd2d0ce)
+                                : Colors.white.withOpacity(0.2),
+                            border: Border.all(
+                                color: selected == index
+                                    ? Colors.transparent
+                                    : Colors.white,
+                                width: 1),
                             borderRadius: BorderRadius.all(
-                              Radius.circular(20),
+                              Radius.circular(20.r),
                             ),
                           ),
                           child: Center(
-                            child: Text(
-                              "For You",
-                              style: TextStyle(
-                                color: Colors.black,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10.w),
+                              child: Text(
+                                catagory[index],
+                                style: TextStyle(
+                                    color: selected == index
+                                        ? Colors.black
+                                        : Colors.white,
+                                    fontSize: 13.sp,
+                                    fontFamily: "Poppins-Medium"),
                               ),
                             ),
                           ),
