@@ -1,7 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.holylazy">
     <uses-permission android:name="android.permission.INTERNET"/>
-   <application
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+
+
+    <application
         android:usesCleartextTraffic="true"
         android:label="holylazy"
         android:name="${applicationName}"

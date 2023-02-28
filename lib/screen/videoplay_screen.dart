@@ -25,54 +25,46 @@ class _VideoPlayScreenState extends State<VideoPlayScreen> {
   //   //setState(() {});
   // }
 
-  // List videos = [
-  //   'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-  //   'https://assets.mixkit.co/videos/preview/mixkit-young-women-jumping-at-the-concert-14116-large.mp4',
-  //   'https://samplelib.com/lib/preview/mp4/sample-5s.mp4',
-  //   'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-  //   'http://techslides.com/demos/sample-videos/small.mp4',
-  //   'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-  //   'http://techslides.com/demos/sample-videos/small.mp4',
-  //   'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-  //   'http://techslides.com/demos/sample-videos/small.mp4',
-  //   'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-  //   'http://techslides.com/demos/sample-videos/small.mp4',
-  //   'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-  //   'http://techslides.com/demos/sample-videos/small.mp4',
-  //   'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-  //   'http://techslides.com/demos/sample-videos/small.mp4',
-  //   'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-  //   'http://techslides.com/demos/sample-videos/small.mp4',
-  //   'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-  //   'http://techslides.com/demos/sample-videos/small.mp4',
-  //   'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-  //   'http://techslides.com/demos/sample-videos/small.mp4',
-  //   'https://assets.mixkit.co/videos/preview/mixkit-young-women-jumping-at-the-concert-14116-large.mp4',
-  // ];
+  List videos = [
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+  ];
   VideoPlayerController? controller;
+
   @override
   void initState() {
     controller = widget.videoData;
     controller!.play();
+    // videoPlayerController = VideoPlayerController.network(
+    //     "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4")
+    //   ..initialize()
+    //   ..play()
+    //   ..setLooping(true);
+    print("----------------------------video");
+    // videoController = VideoPlayerController.network(
+    //     "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4");
+    // videoController!.play();
     super.initState();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   controller!.dispose();
+  //   controller!.pause();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
-        itemCount: widget.videos.length,
+        itemCount: 3,
         onPageChanged: (index) {
-          // controller = VideoPlayerController.network(widget.videos[index])
-          //   ..initialize()
-          //   ..setLooping(true)
-          //   ..play().then((value) {
-          //     setState(() {});
-          //   });
+          controller!.dispose();
+          print("=======$index");
         },
         itemBuilder: (context, index) {
           return Scaffold(
@@ -82,9 +74,28 @@ class _VideoPlayScreenState extends State<VideoPlayScreen> {
                   color: Colors.red,
                   height: 690.h,
                   width: 360.w,
-                  child: SingleVideo(
-                    url: controller!,
-                  ),
+                  //   url: controller!,
+                  // ),
+                  child: index == 0
+                      ? VideoPlayer(
+                          controller!,
+                        )
+                      : index == 1
+                          ? VideoPlayer(
+                              VideoPlayerController.network(
+                                "https://assets.mixkit.co/videos/preview/mixkit-young-women-jumping-at-the-concert-14116-large.mp4",
+                              )
+                                ..initialize()
+                                ..play()
+                                ..setLooping(true),
+                            )
+                          : VideoPlayer(
+                              VideoPlayerController.network(
+                                  "http://techslides.com/demos/sample-videos/small.mp4")
+                                ..initialize()
+                                ..play()
+                                ..setLooping(true),
+                            ),
                 ),
                 // PageView.builder(
                 //   itemCount: videos.length,
@@ -129,8 +140,15 @@ class _VideoPlayScreenState extends State<VideoPlayScreen> {
                           shape: BoxShape.circle,
                           color: Colors.transparent,
                           border: Border.all(color: Colors.white, width: 2.w),
-                          image: const DecorationImage(
-                            image: ExactAssetImage('assets/images/man3.png'),
+                          image: DecorationImage(
+                            image: index == 0
+                                ? const ExactAssetImage(
+                                    'assets/images/man3.png')
+                                : index == 1
+                                    ? const ExactAssetImage(
+                                        'assets/images/girl2.png')
+                                    : const ExactAssetImage(
+                                        'assets/images/man4.png'),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -144,7 +162,11 @@ class _VideoPlayScreenState extends State<VideoPlayScreen> {
                         width: 8.w,
                       ),
                       Text(
-                        "@Holi.lazy",
+                        index == 0
+                            ? "@Holi.lazy"
+                            : index == 1
+                                ? "anny.bunny"
+                                : "robert.rusai",
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.8),
                           fontSize: 13.sp,
@@ -158,7 +180,11 @@ class _VideoPlayScreenState extends State<VideoPlayScreen> {
                   bottom: 50.h,
                   left: 20.w,
                   child: Text(
-                    "just look at these girls, so much power \nin those eyes💥",
+                    index == 0
+                        ? "the dance was very frenetic, lively, rattling,  \nclanging, rolling..💃"
+                        : index == 1
+                            ? "just look at these girls, so much power \nin those eyes💥"
+                            : "the dance was very frenetic, lively, rattling,  \nclanging, rolling..💃",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 13.sp,
@@ -315,22 +341,9 @@ class SingleVideo extends StatefulWidget {
 }
 
 class _SingleVideoState extends State<SingleVideo> {
-  // VideoPlayerController? controller;
-  @override
-  void initState() {
-    // controller =VideoPlayerController.network(widget.url)
-    //   ..initialize()
-    //   ..play()
-    //   ..setLooping(true);
-
-    print('Hello single video init state');
-    super.initState();
-  }
-
   @override
   void dispose() {
-    // controller!.pause();
-    print('Hello single video dispose');
+    print("----> dispose");
     super.dispose();
   }
 
@@ -342,6 +355,43 @@ class _SingleVideoState extends State<SingleVideo> {
       width: 360.w,
       child: VideoPlayer(
         widget.url,
+      ),
+    );
+  }
+}
+
+class SecondVideo extends StatefulWidget {
+  const SecondVideo({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<SecondVideo> createState() => _SecondVideoState();
+}
+
+class _SecondVideoState extends State<SecondVideo> {
+  VideoPlayerController? videoPlayerController;
+
+  @override
+  void initState() {
+    // videoPlayerController = VideoPlayerController.network(
+    //     "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4")
+    //   ..initialize();
+    print("==============2video");
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.red,
+      height: 690.h,
+      width: 360.w,
+      child: VideoPlayer(
+        VideoPlayerController.network(
+            "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4")
+          ..initialize()
+          ..play(),
       ),
     );
   }
