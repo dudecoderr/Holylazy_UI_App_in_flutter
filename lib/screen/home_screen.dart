@@ -5,6 +5,8 @@ import 'package:holylazy/constant/image_constant.dart';
 import 'package:holylazy/screen/videoplay_screen.dart';
 import 'package:video_player/video_player.dart';
 
+import 'multiplayer.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -72,10 +74,13 @@ class _HomeScreenState extends State<HomeScreen> {
             paddingY: 0.0,
             size: 200,
             highRatio: 300,
-            widgets: videos.map((video) {
+            widgets: videos.asMap().entries.map((entry)  {
+
+
               return SmallVideoWidget(
                 videos: videos,
-                url: video,
+                index : entry.key,
+                url: entry.value,
               );
             }).toList(),
           ),
@@ -358,9 +363,10 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class SmallVideoWidget extends StatefulWidget {
-  SmallVideoWidget({Key? key, required this.url, required this.videos})
+  SmallVideoWidget({Key? key, required this.url,required this.index, required this.videos})
       : super(key: key);
   String url;
+  var index;
   List videos;
 
   @override
@@ -368,19 +374,17 @@ class SmallVideoWidget extends StatefulWidget {
 }
 
 class _SmallVideoWidgetState extends State<SmallVideoWidget> {
-  VideoPlayerController? videoPlayerController;
+
 
   @override
   void initState() {
-    videoPlayerController = VideoPlayerController.network(widget.url)
-      ..initialize()
-      ..setLooping(true);
+
     super.initState();
   }
 
   @override
   void dispose() {
-    videoPlayerController!.dispose();
+
     super.dispose();
   }
 
@@ -391,7 +395,7 @@ class _SmallVideoWidgetState extends State<SmallVideoWidget> {
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
             return VideoPlayScreen(
-              videoData: videoPlayerController!,
+              currentindex:widget.index ,
               videos: widget.videos,
             );
           },
@@ -412,7 +416,11 @@ class _SmallVideoWidgetState extends State<SmallVideoWidget> {
             borderRadius: BorderRadius.all(
               Radius.circular(20.0.r),
             ),
-            child: VideoPlayer(videoPlayerController!),
+            child:  FlickMultiPlayer(
+              isheaderVideo: true,
+              url: widget.url,
+              flickMultiManager: FlickMultiManager(mute: true)),
+            // Container(color: Colors.pink),
           ),
         ),
       ),

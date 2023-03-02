@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
 
+import 'multiplayer.dart';
+
 class VideoPlayScreen extends StatefulWidget {
-  VideoPlayScreen({required this.videoData, required this.videos, Key? key})
+  VideoPlayScreen({required this.currentindex, required this.videos, Key? key})
       : super(key: key);
 
-  VideoPlayerController videoData;
+  var currentindex;
   List videos;
 
   @override
@@ -14,59 +16,28 @@ class VideoPlayScreen extends StatefulWidget {
 }
 
 class _VideoPlayScreenState extends State<VideoPlayScreen> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   controller = VideoPlayerController.network(
-  //       "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4")
-  //     ..initialize()
-  //     ..play()
-  //     ..setLooping(true);
-  //   //setState(() {});
-  // }
 
-  List videos = [
-    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-  ];
-  VideoPlayerController? controller;
+
 
   @override
   void initState() {
-    controller = widget.videoData;
-    controller!.play();
-    // videoPlayerController = VideoPlayerController.network(
-    //     "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4")
-    //   ..initialize()
-    //   ..play()
-    //   ..setLooping(true);
-    print("----------------------------video");
-    // videoController = VideoPlayerController.network(
-    //     "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4");
-    // videoController!.play();
+
+    _controller = PageController(initialPage: widget.currentindex);
     super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //   controller!.dispose();
-  //   controller!.pause();
-  //   super.dispose();
-  // }
-
+  PageController _controller = PageController(initialPage: 0, keepPage: false);
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
-        itemCount: 3,
+      controller: _controller,
+        itemCount: widget.videos.length,
         onPageChanged: (index) {
-          controller!.dispose();
+
           print("=======$index");
+          print("=======${widget.videos[widget.currentindex]}");
         },
         itemBuilder: (context, index) {
+          print("=======${widget.videos[widget.currentindex]}");
           return Scaffold(
             body: Stack(
               children: [
@@ -76,26 +47,11 @@ class _VideoPlayScreenState extends State<VideoPlayScreen> {
                   width: 360.w,
                   //   url: controller!,
                   // ),
-                  child: index == 0
-                      ? VideoPlayer(
-                          controller!,
-                        )
-                      : index == 1
-                          ? VideoPlayer(
-                              VideoPlayerController.network(
-                                "https://assets.mixkit.co/videos/preview/mixkit-young-women-jumping-at-the-concert-14116-large.mp4",
-                              )
-                                ..initialize()
-                                ..play()
-                                ..setLooping(true),
-                            )
-                          : VideoPlayer(
-                              VideoPlayerController.network(
-                                  "http://techslides.com/demos/sample-videos/small.mp4")
-                                ..initialize()
-                                ..play()
-                                ..setLooping(true),
-                            ),
+                  child:  FlickMultiPlayer(
+                      isheaderVideo: true,
+                      url: widget.videos[index],
+                      flickMultiManager: FlickMultiManager(mute: true))
+
                 ),
                 // PageView.builder(
                 //   itemCount: videos.length,
