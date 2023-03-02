@@ -374,11 +374,13 @@ class SmallVideoWidget extends StatefulWidget {
 }
 
 class _SmallVideoWidgetState extends State<SmallVideoWidget> {
-
+  VideoPlayerController? videoPlayerController;
 
   @override
   void initState() {
-
+    videoPlayerController = VideoPlayerController.network(widget.url)
+      ..initialize()
+      ..setLooping(true);
     super.initState();
   }
 
@@ -416,11 +418,7 @@ class _SmallVideoWidgetState extends State<SmallVideoWidget> {
             borderRadius: BorderRadius.all(
               Radius.circular(20.0.r),
             ),
-            child:  FlickMultiPlayer(
-              isheaderVideo: true,
-              url: widget.url,
-              flickMultiManager: FlickMultiManager(mute: true)),
-            // Container(color: Colors.pink),
+            child: VideoPlayer(videoPlayerController!),
           ),
         ),
       ),
